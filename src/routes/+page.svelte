@@ -1,6 +1,9 @@
 <script>
 	import { onMount } from 'svelte';
 	import Diploma from '../lib/components/diploma.svelte';
+	import Gears from '../lib/components/gears.svelte';
+	import Lamp from '../lib/components/lamp.svelte';
+	import Perfil from '../lib/components/perfil.svelte';
 
 	Number.prototype.clamp = function (min, max) {
 		return Math.min(Math.max(this, min), max);
@@ -79,14 +82,18 @@
 	});
 </script>
 <main on:mousemove={(e) => shadowCaster.readMouseEvent(e)}>
+	<div id="background">
+		<div id="bkg-waves"></div>
+		<div id="bkg-stripes"></div>
+	</div>
 	<div>
-		<div class="button-holder  esquerdo">
+		<div class="button-holder esquerdo">
 			<!-- svelte-ignore a11y-missing-attribute -->
 			<a>
 				<div class="tchan">
 					<div class="moving-tchan">
 						<div class="inner-tchan">
-							<Diploma />
+							<Perfil />
 						</div>
 					</div>
 				</div>
@@ -99,7 +106,7 @@
 				<div class="tchan">
 					<div class="moving-tchan">
 						<div class="inner-tchan">
-							<Diploma />
+							<Lamp />
 						</div>
 					</div>
 				</div>
@@ -134,7 +141,7 @@
 				<div class="tchan">
 					<div class="moving-tchan">
 						<div class="inner-tchan">
-							<Diploma />
+							<Gears />
 						</div>
 					</div>
 				</div>
@@ -165,21 +172,89 @@
 		align-items: center;
 		justify-content: center;
 		flex-direction: column;
+		--cor-fundo: rgb(0, 15, 28);
+		background-color: var(--cor-fundo);
 	}
-	div{
+	#background, #bkg-waves, #bkg-stripes {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		--cor-fundo: rgb(219, 239, 239);
+		background-color: var(--cor-fundo);
+	}
+	#bkg-waves{
+		background-color: rgba(255, 255, 255, 0.05);
+		background-image: url("assets/sin.svg");
+	}
+
+	#bkg-stripes{
+		width: calc(100% + 400px);
+		--thickness-x: 50px;
+		--thickness-y: 100px;
+		--thickness-d: 90px;
+		--offset-d: 84px;
+		background:
+		repeating-linear-gradient(
+			-0.463647609000005179rad,
+		transparent var(--offset-d),
+		transparent calc(var(--offset-d) + var(--thickness-d)),
+		var(--cor-fundo) calc(var(--offset-d) + var(--thickness-d)),
+		var(--cor-fundo) calc(var(--offset-d) + calc(var(--thickness-d) * 2))
+		), repeating-linear-gradient(
+		90deg,
+		transparent,
+		transparent var(--thickness-y),
+		var(--cor-fundo) var(--thickness-y),
+		var(--cor-fundo) calc(var(--thickness-y) * 2)
+		), repeating-linear-gradient(
+		0deg,
+		transparent,
+		transparent var(--thickness-x),
+		var(--cor-fundo) var(--thickness-x),
+		var(--cor-fundo) calc(var(--thickness-x) * 2)
+		);
+		animation: scroll-lateral infinite 4s linear;
+	}
+
+	@keyframes scroll-lateral{
+		0%{
+			transform: translate(0, 0);
+		}
+		100%{
+			transform: translate(-400px, 0);
+		}
+	}
+
+
+	@keyframes cor-mudando {
+		0% {
+			--cor-fundo: rgb(214, 228, 241);
+		}
+		50% {
+			--cor-fundo: rgb(255, 249, 207);
+		}
+		100% {
+			--cor-fundo: rgb(214, 228, 241);
+		}
+	}
+	div {
 		width: 100%;
 	}
-	.button-holder{
+	.button-holder {
 		display: flex;
 	}
-	.button-holder:nth-child(even){
+	.button-holder:nth-child(even) {
 		justify-content: flex-end;
-		
 	}
-	a{
+	a {
 		width: 80%;
 		max-width: 500px;
-		transition: width 0.5s, max-width 0.5s;
+		transition:
+			width 0.5s,
+			max-width 0.5s;
 		position: relative;
 		margin: 10px 0;
 	}
@@ -192,9 +267,8 @@
 		background: linear-gradient(to right, #e73c7e, #23a6d5);
 		background-size: 200% 100%;
 		position: relative;
-  
 	}
-	a > span::after{
+	a > span::after {
 		content: '	';
 		width: 20px;
 		height: 20px;
@@ -202,46 +276,43 @@
 		border-radius: 10px;
 		border: 2px solid black;
 		background-color: white;
-
 	}
-	.button-holder:nth-child(even) a > span::after{
+	.button-holder:nth-child(even) a > span::after {
 		left: 16px;
 		top: 16px;
 	}
-	.button-holder:nth-child(odd) a > span::after{
+	.button-holder:nth-child(odd) a > span::after {
 		right: 16px;
 		top: 16px;
 	}
-	a:hover{
+	a:hover {
 		width: 90%;
 		max-width: 530px;
 	}
-	a:hover > span
-	 {
+	a:hover > span {
 		animation: gradient-out 0.5s ease forwards;
 	}
 
-
-	.button-holder:nth-child(even) a > span{
+	.button-holder:nth-child(even) a > span {
 		border-radius: 30px 0 0 30px;
 		border-right-width: 0;
 		animation: gradient-out 0.5s ease forwards;
 	}
-	.button-holder:nth-child(odd) a > span{
+	.button-holder:nth-child(odd) a > span {
 		background-position: 100% 0%;
 		border-radius: 0 30px 30px 0;
 		border-left-width: 0;
 		animation: gradient-in 0.5s ease forwards;
 	}
 
-	.button-holder:nth-child(even) a:hover > span{
+	.button-holder:nth-child(even) a:hover > span {
 		animation: gradient-in 0.5s ease forwards;
 	}
-	.button-holder:nth-child(odd) a:hover > span{
+	.button-holder:nth-child(odd) a:hover > span {
 		animation: gradient-out 0.5s ease forwards;
 	}
-	
-	.tchan{
+
+	.tchan {
 		position: absolute;
 		height: 300px;
 		width: 300px;
@@ -249,37 +320,41 @@
 		overflow: hidden;
 		pointer-events: none;
 	}
-	.button-holder:nth-child(even) .tchan{
+	.button-holder:nth-child(even) .tchan {
 		right: 5vw;
 	}
-	.button-holder:nth-child(odd) .tchan{
+	.button-holder:nth-child(odd) .tchan {
 		left: 5vw;
 	}
 
 	/* .tchan, .moving-tchan, .inner-tchan{
 		border: 1px dashed black;
 	} */
-	.moving-tchan{
+	.moving-tchan {
 		position: absolute;
 		top: -50px;
 		height: 200%;
 		width: 200%;
 		position: relative;
-		transition: transform .5s;
+		transition: transform 0.5s;
 		transform: rotate(-90deg);
 	}
-	.button-holder:nth-child(even) .moving-tchan{
+	.button-holder:nth-child(even) .moving-tchan {
 		left: 0;
 	}
-	.button-holder:nth-child(odd) .moving-tchan{
+	.button-holder:nth-child(odd) .moving-tchan {
 		left: -100%;
 		transform: rotate(90deg);
 	}
 
-	a:hover .moving-tchan{
-		transform: rotate(-0.1deg) !important;
+	.button-holder:nth-child(odd) a:hover .moving-tchan {
+		transform: rotate(10deg) !important;
 	}
-	.inner-tchan{
+	.button-holder:nth-child(even) a:hover .moving-tchan {
+		transform: rotate(-10deg) !important;
+	}
+
+	.inner-tchan {
 		height: 35%;
 		width: 35%;
 		bottom: calc(50% + 5px);
@@ -287,16 +362,16 @@
 		display: flex;
 		align-items: flex-end;
 	}
-	.button-holder:nth-child(even) .inner-tchan{
+	.button-holder:nth-child(even) .inner-tchan {
 		right: 50%;
 		justify-content: flex-end;
 	}
-	.button-holder:nth-child(odd) .inner-tchan{
+	.button-holder:nth-child(odd) .inner-tchan {
 		left: 50%;
 		justify-content: flex-start;
 	}
 
-	.centerpiece{
+	.centerpiece {
 		display: flex;
 		justify-content: center;
 		pointer-events: none;
@@ -319,7 +394,6 @@
 		}
 	}
 
-
 	.nome-estilizado {
 		font-size: 120px;
 		-webkit-text-stroke-width: 4px;
@@ -330,11 +404,11 @@
 		width: 430px;
 	}
 	.nome-estilizado .shadower {
-		color: rgb(52, 80, 56);
+		color: rgba(25, 49, 29, 0.7);
 		text-shadow: 10px 10px 5px;
 	}
 	.nome-estilizado .shadower h2 {
-		color: rgba(52, 80, 56, 0.83);
+		color: rgba(25, 49, 29, 0.5);
 	}
 	.nome-estilizado .overlay {
 		position: absolute;
@@ -347,7 +421,7 @@
 	}
 	.nome-estilizado h2 {
 		-webkit-text-stroke-width: 0px;
-		color: white;
+		color: rgb(219, 239, 239);
 		text-align: right;
 		word-spacing: -25px;
 		font-size: 60px;
