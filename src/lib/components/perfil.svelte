@@ -1,6 +1,6 @@
 <main>
     <div>
-        <img src="profile.png" alt="" srcset="">
+        <img src="assets/profile.png" alt="" srcset="">
     </div>
 </main>
 <style>
