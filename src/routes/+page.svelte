@@ -172,8 +172,8 @@
 		align-items: center;
 		justify-content: center;
 		flex-direction: column;
-		--cor-fundo: rgb(0, 15, 28);
 		position: relative;
+		--cor-fundo: #2f706b;
 	}
 	#background, #bkg-waves, #bkg-stripes {
 		position: absolute;
@@ -182,11 +182,9 @@
 		width: 100%;
 		height: 100%;
 		overflow: hidden;
-		--cor-fundo: rgb(219, 239, 239);
 		background-color: var(--cor-fundo);
 	}
 	#bkg-waves{
-		background-color: rgba(255, 255, 255, 0.05);
 		background-image: url($lib/assets/sin.svg);
 	}
 
@@ -422,7 +420,7 @@
 	}
 	.nome-estilizado h2 {
 		-webkit-text-stroke-width: 0px;
-		color: rgb(219, 239, 239);
+		color: var(--cor-fundo);
 		text-align: right;
 		word-spacing: -25px;
 		font-size: 60px;
