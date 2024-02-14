@@ -252,6 +252,7 @@
 	a {
 		width: 80%;
 		max-width: 500px;
+		min-width: 250px;
 		transition:
 			width 0.5s,
 			max-width 0.5s;
