@@ -173,7 +173,7 @@
 		justify-content: center;
 		flex-direction: column;
 		--cor-fundo: rgb(0, 15, 28);
-		background-color: var(--cor-fundo);
+		position: relative;
 	}
 	#background, #bkg-waves, #bkg-stripes {
 		position: absolute;
@@ -198,7 +198,7 @@
 		--offset-d: 84px;
 		background:
 		repeating-linear-gradient(
-			-0.463647609000005179rad,
+			0.463647609000005179rad,
 		transparent var(--offset-d),
 		transparent calc(var(--offset-d) + var(--thickness-d)),
 		var(--cor-fundo) calc(var(--offset-d) + var(--thickness-d)),
