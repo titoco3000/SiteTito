@@ -187,7 +187,7 @@
 	}
 	#bkg-waves{
 		background-color: rgba(255, 255, 255, 0.05);
-		background-image: url("assets/sin.svg");
+		background-image: url($lib/assets/sin.svg);
 	}
 
 	#bkg-stripes{

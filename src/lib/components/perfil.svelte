@@ -1,6 +1,9 @@
+<script>
+    import profile from '$lib/assets/profile.png';
+</script>
 <main>
     <div>
-        <img src="assets/profile.png" alt="" srcset="">
+        <img src={profile} alt="" srcset="">
     </div>
 </main>
 <style>
