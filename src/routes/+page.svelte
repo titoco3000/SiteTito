@@ -212,7 +212,8 @@
 		justify-content: center;
 		flex-direction: column;
 		position: relative;
-		--cor-fundo: #2f706b;
+		--cor-fundo: #45a59d;
+		--cor-areia: rgb(226, 221, 114);
 	}
 	#background{
 		z-index: -20;
@@ -272,18 +273,6 @@
 			transform: translate(-400px, 0);
 		}
 	}
-
-	@keyframes cor-mudando {
-		0% {
-			--cor-fundo: rgb(214, 228, 241);
-		}
-		50% {
-			--cor-fundo: rgb(255, 249, 207);
-		}
-		100% {
-			--cor-fundo: rgb(214, 228, 241);
-		}
-	}
 	div {
 		width: 100%;
 	}
@@ -304,14 +293,15 @@
 		margin: 10px 0;
 	}
 	a > span {
+		font-family: monospace;
 		display: block;
 		border: 3px solid black;
 		padding: 10px;
 		text-align: center;
 		font-size: 30px;
-		background: linear-gradient(to right, #e73c7e, #23a6d5);
 		background-size: 200% 100%;
 		position: relative;
+		background-color: rgb(141, 141, 141);
 	}
 	a > span::after {
 		content: '	';
@@ -320,7 +310,7 @@
 		position: absolute;
 		border-radius: 10px;
 		border: 2px solid black;
-		background-color: white;
+		background-color: var(--cor-fundo);
 	}
 	.button-holder:nth-child(even) a > span::after {
 		left: 16px;
@@ -330,6 +320,13 @@
 		right: 16px;
 		top: 16px;
 	}
+	/* .button-holder:nth-child(even) a > span{
+		background: linear-gradient(to right, gray, green);
+	}
+	.button-holder:nth-child(odd) a > span{
+		background: linear-gradient(to left, gray, green);
+	} */
+
 	a:hover {
 		width: 90%;
 		max-width: 530px;
@@ -443,7 +440,7 @@
 		font-size: 120px;
 		-webkit-text-stroke-width: 4px;
 		-webkit-text-stroke-color: black;
-		color: rgb(16, 255, 7);
+		color: var(--cor-areia);
 		font-family: 'Public Sans', sans-serif;
 		position: relative;
 		width: 430px;
@@ -455,7 +452,7 @@
 		text-shadow: 0 0 0;
 	}
 	.nome-estilizado .shadower h2 {
-		color: rgba(25, 49, 29, 0.5);
+		color: rgba(25, 49, 29, 0.3);
 	}
 	.nome-estilizado .overlay {
 		position: absolute;
