@@ -5,6 +5,8 @@
 	import Lamp from '../lib/components/lamp.svelte';
 	import Perfil from '../lib/components/perfil.svelte';
 
+	let nomeEstilizado;
+
 	Number.prototype.clamp = function (min, max) {
 		return Math.min(Math.max(this, min), max);
 	};
@@ -23,8 +25,8 @@
 		},
 		updateShadows() {
 			if (this.trueX != this.lerpedX || this.trueY != this.lerpedY) {
-				this.lerpedX = lerp(this.lerpedX, this.trueX, 0.2);
-				this.lerpedY = lerp(this.lerpedY, this.trueY, 0.2);
+				this.lerpedX = moveTowards(this.lerpedX, this.trueX);
+				this.lerpedY = moveTowards(this.lerpedY, this.trueY);
 
 				h1Shadowed.forEach((element) => {
 					let scenter = getCenter(element);
@@ -32,7 +34,12 @@
 						50 * suavizar(scenter.x - this.lerpedX),
 						50 * suavizar(scenter.y - this.lerpedY)
 					];
-					element.style.textShadow = offs[0] + 'px ' + offs[1] + 'px 5px';
+					element.style.textShadow =
+						'calc( max(0, calc( calc(2 *  var(--progresso)) - 1 ) ) * ' +
+						offs[0] +
+						'px) calc( max(0, calc( calc(2 *  var(--progresso)) - 1 ) ) * ' +
+						offs[1] +
+						'px) 5px';
 				});
 				h2Shadowed.forEach((element) => {
 					let scenter = getCenter(element);
@@ -41,19 +48,22 @@
 						10 * suavizar(scenter.y - this.lerpedY)
 					];
 					element.style.textShadow =
+						'calc( var(--progresso) * ' +
 						offs[0] +
-						'px ' +
+						'px) calc(var(--progresso) * ' +
 						offs[1] +
-						'px ' +
+						'px) ' +
 						10 * suavizar(Math.abs(scenter.x - this.lerpedX) + Math.abs(scenter.y - this.lerpedY)) +
 						'px';
 				});
 			}
 		}
 	};
-	const shadowExtreme = 14;
-	let lightSource;
 
+	function moveTowards(value, target){
+		let maxOff = 50;
+		return lerp(value, target, 0.1).clamp(value-maxOff, value+maxOff);
+	}
 	function lerp(start, end, amt) {
 		return (1 - amt) * start + amt * end;
 	}
@@ -75,12 +85,35 @@
 		requestAnimationFrame(onUpdate);
 	}
 
+	let waterEmergeTime = 2000;
+	let waterEmergeTimeDelay = 1000;
+	function emergeFromWater(t) {
+		if(t<waterEmergeTimeDelay){
+			requestAnimationFrame(emergeFromWater);
+		}
+		else{
+			t -= waterEmergeTimeDelay;
+			let progresso = Math.min(1, t / waterEmergeTime);
+			console.log(progresso);
+			nomeEstilizado.style.setProperty('--progresso', progresso);
+	
+			if (t < waterEmergeTime) requestAnimationFrame(emergeFromWater);
+		}
+	}
+
 	onMount(() => {
 		h1Shadowed = [...document.querySelectorAll('h1 .shadowed')];
 		h2Shadowed = [...document.querySelectorAll('h2 .shadowed')];
+		
+		let rect = nomeEstilizado.getBoundingClientRect();
+		shadowCaster.trueX = rect.left + rect.width/2;
+		shadowCaster.trueY = rect.top + rect.height/2;
+
 		onUpdate();
+		emergeFromWater(0);
 	});
 </script>
+
 <main on:mousemove={(e) => shadowCaster.readMouseEvent(e)}>
 	<div id="background">
 		<div id="bkg-waves"></div>
@@ -115,7 +148,7 @@
 		</div>
 	</div>
 	<div class="centerpiece">
-		<div class="nome-estilizado">
+		<div class="nome-estilizado" bind:this={nomeEstilizado}>
 			<div class="shadower">
 				<h1>
 					{#each 'Tito'.split('') as letra}
@@ -131,6 +164,13 @@
 			<div class="overlay">
 				<h1>Tito</h1>
 				<h2>Guidotti</h2>
+			</div>
+			<div class="cover">
+				<h1>
+					{#each 'Tito'.split('') as letra}
+						<span class="cover-letter">{letra}</span>
+					{/each}
+				</h1>
 			</div>
 		</div>
 	</div>
@@ -175,7 +215,12 @@
 		position: relative;
 		--cor-fundo: #2f706b;
 	}
-	#background, #bkg-waves, #bkg-stripes {
+	#background{
+		z-index: -20;
+	}
+	#background,
+	#bkg-waves,
+	#bkg-stripes {
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -184,48 +229,50 @@
 		overflow: hidden;
 		background-color: var(--cor-fundo);
 	}
-	#bkg-waves{
+	#bkg-waves {
 		background-image: url($lib/assets/sin.svg);
+		filter: blur(1px);
 	}
 
-	#bkg-stripes{
+	#bkg-stripes {
+		filter: blur(5px);
 		width: calc(100% + 400px);
 		--thickness-x: 50px;
 		--thickness-y: 100px;
 		--thickness-d: 90px;
 		--offset-d: 84px;
-		background:
-		repeating-linear-gradient(
-			0.463647609000005179rad,
-		transparent var(--offset-d),
-		transparent calc(var(--offset-d) + var(--thickness-d)),
-		var(--cor-fundo) calc(var(--offset-d) + var(--thickness-d)),
-		var(--cor-fundo) calc(var(--offset-d) + calc(var(--thickness-d) * 2))
-		), repeating-linear-gradient(
-		90deg,
-		transparent,
-		transparent var(--thickness-y),
-		var(--cor-fundo) var(--thickness-y),
-		var(--cor-fundo) calc(var(--thickness-y) * 2)
-		), repeating-linear-gradient(
-		0deg,
-		transparent,
-		transparent var(--thickness-x),
-		var(--cor-fundo) var(--thickness-x),
-		var(--cor-fundo) calc(var(--thickness-x) * 2)
-		);
+		background: repeating-linear-gradient(
+				0.463647609000005179rad,
+				transparent var(--offset-d),
+				transparent calc(var(--offset-d) + var(--thickness-d)),
+				var(--cor-fundo) calc(var(--offset-d) + var(--thickness-d)),
+				var(--cor-fundo) calc(var(--offset-d) + calc(var(--thickness-d) * 2))
+			),
+			repeating-linear-gradient(
+				90deg,
+				transparent,
+				transparent var(--thickness-y),
+				var(--cor-fundo) var(--thickness-y),
+				var(--cor-fundo) calc(var(--thickness-y) * 2)
+			),
+			repeating-linear-gradient(
+				0deg,
+				transparent,
+				transparent var(--thickness-x),
+				var(--cor-fundo) var(--thickness-x),
+				var(--cor-fundo) calc(var(--thickness-x) * 2)
+			);
 		animation: scroll-lateral infinite 4s linear;
 	}
 
-	@keyframes scroll-lateral{
-		0%{
+	@keyframes scroll-lateral {
+		0% {
 			transform: translate(0, 0);
 		}
-		100%{
+		100% {
 			transform: translate(-400px, 0);
 		}
 	}
-
 
 	@keyframes cor-mudando {
 		0% {
@@ -401,10 +448,12 @@
 		font-family: 'Public Sans', sans-serif;
 		position: relative;
 		width: 430px;
+		--progresso: 0;
+		z-index: -10;
 	}
 	.nome-estilizado .shadower {
 		color: rgba(25, 49, 29, 0.7);
-		text-shadow: 10px 10px 5px;
+		text-shadow: 0 0 0;
 	}
 	.nome-estilizado .shadower h2 {
 		color: rgba(25, 49, 29, 0.5);
@@ -414,6 +463,17 @@
 		top: 0;
 		left: 0;
 	}
+	/* .nome-estilizado .overlay h1{
+		text-shadow: 
+		0px 0px calc(max(0, calc( calc(2 *  var(--progresso)) - 1 ) ) * 1000px) white,
+		0px 0px calc(max(0, calc( calc(2 *  var(--progresso)) - 1 ) ) * 1000px) white,
+		0px 0px calc(max(0, calc( calc(2 *  var(--progresso)) - 1 ) ) * 1000px) white,
+		0px 0px calc(max(0, calc( calc(2 *  var(--progresso)) - 1 ) ) * 1000px) white,
+		0px 0px calc(max(0, calc( calc(2 *  var(--progresso)) - 1 ) ) * 1000px) white,
+		0px 0px calc(max(0, calc( calc(2 *  var(--progresso)) - 1 ) ) * 1000px) white,
+		0px 0px calc(max(0, calc( calc(2 *  var(--progresso)) - 1 ) ) * 1000px) white;
+
+	} */
 	.nome-estilizado h1 {
 		line-height: 180px;
 		font-weight: 900;
@@ -428,5 +488,12 @@
 	.nome-estilizado * {
 		padding: 0;
 		margin: 0;
+	}
+	.nome-estilizado .cover {
+		position: absolute;
+		top: 0;
+		color: transparent;
+		-webkit-text-stroke-width: calc(calc(1 - min(1, calc(2 *  var(--progresso)))) * 40px);
+		-webkit-text-stroke-color: var(--cor-fundo);
 	}
 </style>
