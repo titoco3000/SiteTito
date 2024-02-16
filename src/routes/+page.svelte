@@ -20,6 +20,11 @@
 		lerpedX: 0,
 		lerpedY: 0,
 		readMouseEvent(event) {
+			if(maxOff == 10){
+				setTimeout(() => {
+					maxOff = 100;
+				}, 500);
+			}
 			this.trueX = event.clientX;
 			this.trueY = event.clientY;
 		},
@@ -60,8 +65,8 @@
 		}
 	};
 
+	let maxOff = 10;
 	function moveTowards(value, target){
-		let maxOff = 50;
 		return lerp(value, target, 0.1).clamp(value-maxOff, value+maxOff);
 	}
 	function lerp(start, end, amt) {
@@ -107,10 +112,11 @@
 		
 		let rect = nomeEstilizado.getBoundingClientRect();
 		shadowCaster.trueX = rect.left + rect.width/2;
+		shadowCaster.lerpedX = shadowCaster.trueX;
 		shadowCaster.trueY = rect.top + rect.height/2;
+		shadowCaster.lerpedY = shadowCaster.trueY;
 
 		onUpdate();
-		emergeFromWater(0);
 	});
 </script>
 
@@ -164,13 +170,6 @@
 			<div class="overlay">
 				<h1>Tito</h1>
 				<h2>Guidotti</h2>
-			</div>
-			<div class="cover">
-				<h1>
-					{#each 'Tito'.split('') as letra}
-						<span class="cover-letter">{letra}</span>
-					{/each}
-				</h1>
 			</div>
 		</div>
 	</div>
@@ -448,7 +447,7 @@
 		font-family: 'Public Sans', sans-serif;
 		position: relative;
 		width: 430px;
-		--progresso: 0;
+		--progresso: 1;
 		z-index: -10;
 	}
 	.nome-estilizado .shadower {
@@ -463,17 +462,6 @@
 		top: 0;
 		left: 0;
 	}
-	/* .nome-estilizado .overlay h1{
-		text-shadow: 
-		0px 0px calc(max(0, calc( calc(2 *  var(--progresso)) - 1 ) ) * 1000px) white,
-		0px 0px calc(max(0, calc( calc(2 *  var(--progresso)) - 1 ) ) * 1000px) white,
-		0px 0px calc(max(0, calc( calc(2 *  var(--progresso)) - 1 ) ) * 1000px) white,
-		0px 0px calc(max(0, calc( calc(2 *  var(--progresso)) - 1 ) ) * 1000px) white,
-		0px 0px calc(max(0, calc( calc(2 *  var(--progresso)) - 1 ) ) * 1000px) white,
-		0px 0px calc(max(0, calc( calc(2 *  var(--progresso)) - 1 ) ) * 1000px) white,
-		0px 0px calc(max(0, calc( calc(2 *  var(--progresso)) - 1 ) ) * 1000px) white;
-
-	} */
 	.nome-estilizado h1 {
 		line-height: 180px;
 		font-weight: 900;
@@ -488,12 +476,5 @@
 	.nome-estilizado * {
 		padding: 0;
 		margin: 0;
-	}
-	.nome-estilizado .cover {
-		position: absolute;
-		top: 0;
-		color: transparent;
-		-webkit-text-stroke-width: calc(calc(1 - min(1, calc(2 *  var(--progresso)))) * 40px);
-		-webkit-text-stroke-color: var(--cor-fundo);
 	}
 </style>
