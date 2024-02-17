@@ -4,6 +4,7 @@
 	import Gears from '../lib/components/gears.svelte';
 	import Lamp from '../lib/components/lamp.svelte';
 	import Perfil from '../lib/components/perfil.svelte';
+	import SeletorLinguagem from '../lib/components/seletorLinguagem.svelte';
 
 	let nomeEstilizado;
 
@@ -124,6 +125,9 @@
 	<div id="background">
 		<div id="bkg-waves"></div>
 		<div id="bkg-stripes"></div>
+	</div>
+	<div>
+		<SeletorLinguagem />
 	</div>
 	<div>
 		<div class="button-holder esquerdo">
