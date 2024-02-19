@@ -1,9 +1,15 @@
 export default {
     pt: {
-      "projetos": "projetos",
+      "sobremim": "Sobre mim",
+      "projetos": "Projetos",
+      "tec": "Tecnologias",
+      "formacao": "Formação & Certificados",
     },
     en: {
-      "projetos": "projects",
+      "sobremim": "About me",
+      "projetos": "Projects",
+      "tec": "Tech stack",
+      "formacao": "Education & Certificates",
     },
   };
   
