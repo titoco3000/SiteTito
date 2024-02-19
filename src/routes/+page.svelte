@@ -113,13 +113,13 @@
 		position: relative;
         font-size: 40px;
         overflow: visible;
-        color: rgb(175, 175, 175);
+        color: rgb(130, 130, 130);
 		background-color: transparent;
 		width: 100%;
 		max-width: 700px;
 		text-align: right;
 		padding-right: 30px;
-		transition: color 0.5s;
+		transition: color 0.3s;
 	}
 	#botoes > button:hover{
 		color: white;
@@ -139,13 +139,12 @@
 		width: 0px;
 		height: 150px;
 		transition: width .5s linear, filter 2s;
-		box-shadow: inset 4px 0 20px var(--cor-fundo),
-        inset 4px 0 20px var(--cor-fundo);
+		box-shadow: inset 4px 0 20px var(--cor-fundo);
 		filter: blur(30px);
 	}
 	#botoes > button:hover::before {
 		width: 600px;
-		transition: width 1s linear, filter .7s;
+		transition: width 4s linear, filter .5s;
 		filter: blur(0.5px);
 	}
 </style>
