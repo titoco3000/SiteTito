@@ -1,10 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
-	import Diploma from '../lib/components/diploma.svelte';
-	import Gears from '../lib/components/gears.svelte';
-	import Lamp from '../lib/components/lamp.svelte';
-	import Perfil from '../lib/components/perfil.svelte';
-	import SeletorLinguagem from '../lib/components/seletorLinguagem.svelte';
+	import Diploma from '$lib/components/diploma.svelte';
+	import Gears from '$lib/components/gears.svelte';
+	import Lamp from '$lib/components/lamp.svelte';
+	import Perfil from '$lib/components/perfil.svelte';
+	import SeletorLinguagem from '$lib/components/seletorLinguagem.svelte';
 
 	let nomeEstilizado;
 
