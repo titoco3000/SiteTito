@@ -6,6 +6,7 @@
     export let fill = 'gray';
     
     const b = 3;
+
 </script>
 <main>
     <div id="outer" style="
