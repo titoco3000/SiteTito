@@ -1,11 +1,12 @@
 <script>
 	import SeletorLinguagem from '$lib//components/seletorLinguagem.svelte';
-	import NomeDestaque from '../lib/components/nomeDestaque.svelte';
+	import NomeDestaque from '$lib/components/nomeDestaque.svelte';
 	import Profile from '$lib/assets/profile.png';
 	import ImpressaoDigital from '$lib/assets/impdig.png';
 	import Spiral from '$lib/assets/spiral.svg';
 	import { onMount } from 'svelte';
 	import { t } from '$lib/texto.js';
+	import Wheel from '$lib/components/Wheel.svelte';
 	import PainelIcones from '$lib/components/painelIcones.svelte';
 
 	let mainEl;
@@ -106,14 +107,15 @@
 				</div>
 			</div>
 		</div>
-		<div id="wave-dividers">
-			{#each ['rgb(108, 0, 0)', 'rgb(0, 31, 98)', 'rgb(83, 0, 91)', 'rgb(0, 144, 110)', 'rgb(108, 0, 0)', 'rgb(0, 31, 98)', 'rgb(83, 0, 91)', 'rgb(0, 144, 110)', 'rgb(108, 0, 0)', 'rgb(0, 31, 98)', 'rgb(83, 0, 91)', 'rgb(0, 144, 110)'] as cor}
-				<div class="wavy" style="background-color: {cor};"></div>
+		<div id="transicao-barras" bind:this={barrasTransicaoEl}>
+			{#each { length: nBarras } as item}
+				<!-- content here -->
+				<div class="barra-transicao" style="--nBarras:{nBarras};"></div>
 			{/each}
 		</div>
-		<section id="tecnologias" class="wavy">
+		<section id="tecnologias">
 			<header class="movable">
-				<h1>Tecnologias</h1>
+				<h1 style="color: rgba(0,0,0,0.3);">Tecnologias</h1>
 			</header>
 			<div>
 				<div id="painelIconesHolder" bind:this={painelIconesEl}>
@@ -121,25 +123,41 @@
 				</div>
 			</div>
 		</section>
-
-		<div id="transicao-barras" bind:this={barrasTransicaoEl}>
-			{#each { length: nBarras } as item}
-				<!-- content here -->
-				<div class="barra-transicao" style="--nBarras:{nBarras};"></div>
+		<div id="wave-dividers">
+			{#each ['rgb(108, 0, 0)', 'rgb(0, 31, 98)', 'rgb(83, 0, 91)', 'rgb(0, 144, 110)', 'rgb(108, 0, 0)', 'rgb(0, 31, 98)', 'rgb(83, 0, 91)', 'rgb(0, 144, 110)', 'rgb(108, 0, 0)', 'rgb(0, 31, 98)', 'rgb(83, 0, 91)', 'rgb(0, 144, 110)'] as cor}
+				<div class="wavy" style="background-color: {cor};"></div>
 			{/each}
 		</div>
-		<section id="portfolio">
+		
+
+		<section id="portfolio" class="wavy">
 			<header>
 				<h1>Coleção</h1>
 			</header>
 			<div>
-				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, ut! Illo eos suscipit impedit at deserunt! Quidem dolore autem culpa id similique quis, sed fugit amet mollitia. Impedit, velit. Illum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga quia dolore aliquid eum earum. Esse, magni atque magnam fugit corporis inventore, fugiat sint doloribus accusamus dolor ea quos facere eveniet. Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, ut! Illo eos suscipit impedit at deserunt! Quidem dolore autem culpa id similique quis, sed fugit amet mollitia. Impedit, velit. Illum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga quia dolore aliquid eum earum. Esse, magni atque magnam fugit corporis inventore, fugiat sint doloribus accusamus dolor ea quos facere eveniet. Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, ut! Illo eos suscipit impedit at deserunt! Quidem dolore autem culpa id similique quis, sed fugit amet mollitia. Impedit, velit. Illum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga quia dolore aliquid eum earum. Esse, magni atque magnam fugit corporis inventore, fugiat sint doloribus accusamus dolor ea quos facere eveniet. Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, ut! Illo eos suscipit impedit at deserunt! Quidem dolore autem culpa id similique quis, sed fugit amet mollitia. Impedit, velit. Illum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga quia dolore aliquid eum earum. Esse, magni atque magnam fugit corporis inventore, fugiat sint doloribus accusamus dolor ea quos facere eveniet. Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, ut! Illo eos suscipit impedit at deserunt! Quidem dolore autem culpa id similique quis, sed fugit amet mollitia. Impedit, velit. Illum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga quia dolore aliquid eum earum. Esse, magni atque magnam fugit corporis inventore, fugiat sint doloribus accusamus dolor ea quos facere eveniet.</p>
+				<Wheel onRevolve={(a,b)=>{
+					console.log(a,b);
+					
+				}}>
+					{#each ["Agua","Terra","Fogo","Ar","A","B","C","D","E"] as item}
+						 <div class="projeto">
+							 <h2>{item}</h2>
+						 </div>
+					{/each}
+				</Wheel>
 			</div>
 		</section>
 	</div>
 </main>
 
 <style>
+	.projeto{
+		background-color: whitesmoke;
+		width: 200px;
+		height: 200px;
+		color: black;
+		margin: 20px;
+	}
 	section{
 		background-color: black;
 		color: white;
@@ -396,6 +414,7 @@
 	}
 	#tecnologias{
 		padding: 40vh 0;
+		background-image: linear-gradient(yellow, rgb(144, 144, 32));
 	}
 	#painelIconesHolder {
 		width: 90vw;
@@ -404,9 +423,9 @@
 		max-height: 370px;
 		animation: tecnologias-move 1s forwards;
 	}
-	#transicao-barras, #tecnologias {
+	#transicao-barras {
 		position: relative;
-		background-color: rgb(25, 25, 0);
+		background-color: black;
 	}
 	.barra-transicao {
 		width: calc(100% + calc(100vh / var(--nBarras)));
@@ -418,6 +437,6 @@
 		right: -200%;
 	}
 	#portfolio{
-		background-color: yellow;
+		background-color: rgb(18, 41, 96);
 	}
 </style>
