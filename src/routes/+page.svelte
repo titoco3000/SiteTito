@@ -32,7 +32,6 @@
 		new IntersectionObserver((entries) => {
 			entries.forEach((entry) => {
 				if (entry.intersectionRatio > 0) {
-					console.log('apareceu ', entry.target);
 					entry.target.style.animation = 'none';
 					entry.target.offsetHeight; /* trigger reflow */
 					entry.target.style.animation = null;
@@ -43,11 +42,15 @@
 		let observer = new IntersectionObserver((entries) => {
 			entries.forEach((entry) => {
 				// console.log(entry.intersectionRatio);
-
 				if (entry.intersectionRatio > 0) {
 					let c = barrasTransicaoEl.children;
 					for (let i = 0; i < nBarras; i++) {
-						let s = (entry.intersectionRatio - i / nBarras) / (1 - i / nBarras);
+						let s;
+						if (entry.boundingClientRect.top < entry.intersectionRect.top)
+							s = 1
+						else
+							s = (entry.intersectionRatio - i / nBarras) / (1 - i / nBarras);
+
 						// console.log(i,"=>",(entry.intersectionRatio - i/nBarras), " / ", 1 - i/nBarras);
 						c[i].style.right = 'calc(  calc(var(--r) * ' + s + ') + ' + -(1 - s) * 100 + '% )';
 						c[i].style.transform = 'scale(' + (0.9 + s * 0.1) + ')';
@@ -65,12 +68,6 @@
 
 <main
 	bind:this={mainEl}
-	on:mousewheel={(e) => {
-		if (e.deltaY > 0 && window.scrollY == 0) {
-			contentEl.style.height = 'auto';
-			contentEl.style.overflow = 'clip visible';
-		}
-	}}
 >
 	<div id="front">
 		<div id="nome">
@@ -114,12 +111,16 @@
 				<div class="wavy" style="background-color: {cor};"></div>
 			{/each}
 		</div>
-		<div id="tecnologias" class="wavy">
-			<aside><h1>Tecnologias</h1></aside>
-			<div bind:this={painelIconesEl}>
-				<PainelIcones />
+		<section id="tecnologias" class="wavy">
+			<header class="movable">
+				<h1>Tecnologias</h1>
+			</header>
+			<div>
+				<div id="painelIconesHolder" bind:this={painelIconesEl}>
+					<PainelIcones />
+				</div>
 			</div>
-		</div>
+		</section>
 
 		<div id="transicao-barras" bind:this={barrasTransicaoEl}>
 			{#each { length: nBarras } as item}
@@ -127,10 +128,56 @@
 				<div class="barra-transicao" style="--nBarras:{nBarras};"></div>
 			{/each}
 		</div>
+		<section id="portfolio">
+			<header>
+				<h1>Coleção</h1>
+			</header>
+			<div>
+				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, ut! Illo eos suscipit impedit at deserunt! Quidem dolore autem culpa id similique quis, sed fugit amet mollitia. Impedit, velit. Illum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga quia dolore aliquid eum earum. Esse, magni atque magnam fugit corporis inventore, fugiat sint doloribus accusamus dolor ea quos facere eveniet. Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, ut! Illo eos suscipit impedit at deserunt! Quidem dolore autem culpa id similique quis, sed fugit amet mollitia. Impedit, velit. Illum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga quia dolore aliquid eum earum. Esse, magni atque magnam fugit corporis inventore, fugiat sint doloribus accusamus dolor ea quos facere eveniet. Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, ut! Illo eos suscipit impedit at deserunt! Quidem dolore autem culpa id similique quis, sed fugit amet mollitia. Impedit, velit. Illum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga quia dolore aliquid eum earum. Esse, magni atque magnam fugit corporis inventore, fugiat sint doloribus accusamus dolor ea quos facere eveniet. Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, ut! Illo eos suscipit impedit at deserunt! Quidem dolore autem culpa id similique quis, sed fugit amet mollitia. Impedit, velit. Illum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga quia dolore aliquid eum earum. Esse, magni atque magnam fugit corporis inventore, fugiat sint doloribus accusamus dolor ea quos facere eveniet. Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, ut! Illo eos suscipit impedit at deserunt! Quidem dolore autem culpa id similique quis, sed fugit amet mollitia. Impedit, velit. Illum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga quia dolore aliquid eum earum. Esse, magni atque magnam fugit corporis inventore, fugiat sint doloribus accusamus dolor ea quos facere eveniet.</p>
+			</div>
+		</section>
 	</div>
 </main>
 
 <style>
+	section{
+		background-color: black;
+		color: white;
+		position: relative;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+	}
+	section > header{
+		overflow: visible;
+		/* border: 1px dashed yellow; */
+		display: flex;
+		width: 0;
+		justify-content: center;
+	}
+	section h1{
+		margin: 0 0 40px 0;
+		color: rgba(255, 255, 255, 0.2);
+		font-size: 60px;
+		/* border: 1px dashed red; */
+		text-align: center;
+		position:relative;
+	}
+	section > div{
+		width: 100%;
+		/* border: 1px dashed blue; */
+		display: flex;
+		justify-content: center;		
+	}
+	@media only screen and (min-width: 800px) {
+	section > header.movable {
+		position: absolute;
+		transform: rotate(-90deg);
+		top: calc(50% - 0px);
+		height: 0;
+		left: 0;
+	}
+	}
 	* {
 		font-family:
 			Futura,
@@ -148,7 +195,7 @@
 		background-color: rgb(39, 39, 39);
 	}
 	#front {
-		height: 100dvh;
+		height: 100lvh;
 		width: 100%;
 		display: flex;
 		position: sticky;
@@ -182,7 +229,7 @@
 
 	#content {
 		height: auto;
-		overflow: hidden;
+		overflow: clip visible;
 		margin: 0;
 		padding: 0;
 	}
@@ -190,7 +237,8 @@
 		width: 100vw;
 		/* max-width: 100%; */
 		/* height: 80vw; */
-		height: 500px;
+		min-height: 100lvh;
+		height: 100lvw;
 		background-color: black;
 		color: white;
 		position: relative;
@@ -307,9 +355,6 @@
 		margin: 0;
 		margin: 2px 0 5px 0;
 	}
-	#tecnologias {
-		background-color: black;
-	}
 	.wavy {
 		min-height: 30px;
 		width: 100%;
@@ -349,30 +394,17 @@
 			transform: translate(0%, 0);
 		}
 	}
-	#tecnologias {
-		padding: 100px 10px;
-		background-color: rgb(25, 25, 0);
-		position: relative;
+	#tecnologias{
+		padding: 40vh 0;
 	}
-	#tecnologias > div {
-		margin: auto;
-		width: 500px;
-		height: 370px;
+	#painelIconesHolder {
+		width: 90vw;
+		max-width: 500px;
+		height: 67.5vw;
+		max-height: 370px;
 		animation: tecnologias-move 1s forwards;
 	}
-	#tecnologias > aside {
-		height: 370px;
-		width: 70px;
-		float: left;
-	}
-	#tecnologias > aside > h1 {
-		transform: rotate(-90deg);
-		color: rgb(108, 108, 108);
-		font-size: 60px;
-		top: 230px;
-		position: relative;
-	}
-	#transicao-barras {
+	#transicao-barras, #tecnologias {
 		position: relative;
 		background-color: rgb(25, 25, 0);
 	}
@@ -383,5 +415,9 @@
 		--r: calc(calc(100vh / var(--nBarras)) / 2);
 		border-radius: var(--r) 0 0 var(--r);
 		position: relative;
+		right: -200%;
+	}
+	#portfolio{
+		background-color: yellow;
 	}
 </style>

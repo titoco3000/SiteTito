@@ -68,7 +68,7 @@
 		height: 33.3%;
 		width: 25%;
         margin: 0;
-        padding: 30px;
+        padding: 6%;
 		border: 1px solid rgba(0, 0, 0, 0.04);
 		transition:
 			box-shadow 0.2s,
