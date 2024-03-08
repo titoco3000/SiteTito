@@ -63,6 +63,7 @@
 		flex-wrap: wrap;
 		justify-content: space-around;
 		align-content: center;
+		background-color: gray;
 	}
 	img {
 		height: 33.3%;
